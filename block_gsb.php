@@ -283,7 +283,11 @@ class block_gsb extends block_base {
 				//Number of Standard Assignments
 				
 					$assignmentnum1 =  $DB->count_records('assignment', array('course'=>$courseid));
-					$assignmentnum2 =  $DB->count_records('assign', array('course'=>$courseid));
+					if ($dbman->table_exists('assign')) {
+						$assignmentnum2 =  $DB->count_records('assign', array('course'=>$courseid));
+					}else{
+						$assignmentnum2 = 0;
+					}
 					$assignmentnum=$assignmentnum1 + $assignmentnum2;
 					$updgsb->assignmentnum = $assignmentnum;
 				
