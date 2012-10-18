@@ -239,10 +239,7 @@ class block_gsb extends block_base {
 					$level = '50';
 					$sql = "SELECT {context}.id FROM  {context}	WHERE {context}.contextlevel = '$level' AND {context}.instanceid = '$courseid'";
 					$context = $DB->get_records_sql($sql);
-					if(isset($updgsb)){
-					}else{
-					$updgsb = new stdClass(); 
-					}
+
 					foreach($context as $row => $values) {
 						$contextid = $values->id;	
 
@@ -411,11 +408,7 @@ class block_gsb extends block_base {
 															 )AND r.roleid=5
 															 AND r.userid = u.id");
 					 
-					if($nostudent>0){
 					$studentviews = round($studentviewsobj->views / $nostudent->students);
-					}else{
-					$studentviews = 0;
-					}
 
 					if($config->studentviews >= $studentviews) {
 						$gsb_score = "";
