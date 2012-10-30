@@ -27,7 +27,6 @@ class block_gsb extends block_base {
 
 	function init() {    
 		$this->title   = get_string('blockname', 'block_gsb');    
-		$this->version = 2012070800;  
 		
 
 		}					

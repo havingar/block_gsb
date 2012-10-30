@@ -25,11 +25,11 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version   = 2012070800;     // The current plugin version (Date: YYYYMMDDXX)
+$plugin->version   = 2012103000;     // The current plugin version (Date: YYYYMMDDXX)
 $plugin->requires  = 2011120100;        // Requires this Moodle version
 $plugin->component = 'block_gsb'; // Full name of the plugin (used for diagnostics)
 $plugin->maturity = MATURITY_STABLE;
 $plugin->release = '2.2.0';
 $plugin->dependencies   = array (
-    'report_gsb'   => 2012070800,          // Needs the GSB Report
+    'report_gsb'   => 2012103000,          // Needs the GSB Report
 );
