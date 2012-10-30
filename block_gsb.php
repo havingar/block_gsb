@@ -170,11 +170,14 @@ class block_gsb extends block_base {
 				$sql = "SELECT DISTINCT {course}.id, {course}.id, {role_assignments}.roleid, Count({role_assignments}.roleid) AS studentsenrolled
 						FROM {user} INNER JOIN (({role_assignments} INNER JOIN {context} ON {role_assignments}.contextid = {context}.id) INNER JOIN ({course} INNER JOIN {course_categories} ON {course}.category = {course_categories}.id) ON {context}.instanceid = {course}.id) ON {user}.id = {role_assignments}.userid 
 						WHERE {course}.id = $courseid
-						HAVING ((({role_assignments}.roleid)=5) AND ((Count({role_assignments}.roleid))>= $enrolments))";
+						GROUP BY {course}.id, {role_assignments}.roleid
+						HAVING ((({role_assignments}.roleid)=5) AND ((Count({role_assignments}.roleid))>= $enrolments))
+						";
 				} else {
 				$sql = "SELECT DISTINCT {course}.id, {course}.id, {role_assignments}.roleid, Count({role_assignments}.roleid) AS studentsenrolled
 						FROM {user} INNER JOIN (({role_assignments} INNER JOIN {context} ON {role_assignments}.contextid = {context}.id) INNER JOIN ({course} INNER JOIN {course_categories} ON {course}.category = {course_categories}.id) ON {context}.instanceid = {course}.id) ON {user}.id = {role_assignments}.userid 
 						WHERE {course_categories}.depth = '1' AND {course}.id = $courseid
+						GROUP BY {course}.id, {role_assignments}.roleid						
 						HAVING ((({role_assignments}.roleid)=5) AND ((Count({role_assignments}.roleid))>= $enrolments))";
 				}	
 
@@ -410,8 +413,8 @@ class block_gsb extends block_base {
 															 WHERE contextlevel=50 AND instanceid=l.course
 															 )AND r.roleid=5
 															 AND r.userid = u.id");
-					 
-					if($nostudent>0){
+
+					if($nostudent->students>0){
 					$studentviews = round($studentviewsobj->views / $nostudent->students);
 					}else{
 					$studentviews = 0;
