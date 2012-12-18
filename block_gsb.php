@@ -860,7 +860,11 @@ class block_gsb extends block_base {
 				$message = '<div align="center">Your course is:</div><br />';
 				$img = "<div align='center'><img src='$CFG->wwwroot/blocks/gsb/images/bronze.png' width='90' height='98'></div>";
 				$link = "<p align='center'><b><a href='$config->help' target='_blank'>How can I improve my course medal?</a></b></p>";
-			} else if($viewgsb == 'Yes' and $gsb == '') {
+			} else if($viewgsb == 'Yes' and $gsb == 'exclude') {
+				$message = '';
+				$img = "";
+				$link = "";			
+			} else{
 				$message = '<div align="center">Your course is:</div><br />';
 				$img = "<div align='center'><img src='$CFG->wwwroot/blocks/gsb/images/in_development.png' width='90' height='90'></div>";
 				$link = "<p align='center'><b><a href='$config->help' target='_blank'>How can I improve my course medal?</a></b></p>";
@@ -870,6 +874,7 @@ class block_gsb extends block_base {
 			$message = '';
 			$viewgsb = '';
 			$link = '';
+			
 		}
 				
 		$this->content         =  new stdClass;    
