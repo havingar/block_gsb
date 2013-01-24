@@ -30,7 +30,7 @@ class block_gsb extends block_base {
 		
 
 		}					
-
+	function has_config() {return true;}
 	function get_content() { 
 		global $CFG, $DB, $USER, $COURSE;   
 		$dbman = $DB->get_manager(); 
@@ -187,7 +187,7 @@ class block_gsb extends block_base {
 
 					$courseid1 = $values->id;
 
-					$table = "block_gsb_content";
+					$table = "block_gsb";
 					$conditions = array('ids'=>"$courseid1");
 					$test = $DB->record_exists($table, $conditions); 
 
@@ -213,13 +213,13 @@ class block_gsb extends block_base {
 						$record->gsb = "";
 						$record->gsboverride = "no";
 						$record->enrolnum = 0;
-						$insert_gsb_row = $DB->insert_record('block_gsb_content', $record);		
+						$insert_gsb_row = $DB->insert_record('block_gsb', $record);		
 
 					}
 				}	
-				$sql = "SELECT {block_gsb_content}.id AS gb, {course}.id, {course}.shortname, {course}.fullname, {block_gsb_content}.gsb, {block_gsb_content}.enrolnum, {block_gsb_content}.gsboverride
-						FROM  {course} INNER JOIN {block_gsb_content} ON {course}.id = {block_gsb_content}.ids
-						WHERE ((({block_gsb_content}.ids = $courseid)))";
+				$sql = "SELECT {block_gsb}.id AS gb, {course}.id, {course}.shortname, {course}.fullname, {block_gsb}.gsb, {block_gsb}.enrolnum, {block_gsb}.gsboverride
+						FROM  {course} INNER JOIN {block_gsb} ON {course}.id = {block_gsb}.ids
+						WHERE ((({block_gsb}.ids = $courseid)))";
 
 				$get_dept_codes = $DB->get_records_sql($sql);
 				
@@ -251,8 +251,8 @@ class block_gsb extends block_base {
 						$enrolnum =  $DB->count_records('role_assignments', array('contextid'=>$contextid));
 						$updgsb->id = $gsbid;
 						$updgsb->enrolnum = $enrolnum;
-						if ($DB->record_exists('block_gsb_content', array('id' => $updgsb->id))) {
-							$DB->update_record('block_gsb_content', $updgsb); 
+						if ($DB->record_exists('block_gsb', array('id' => $updgsb->id))) {
+							$DB->update_record('block_gsb', $updgsb); 
 						} 
 
 					}
@@ -384,8 +384,8 @@ class block_gsb extends block_base {
 				
 					}
 
-					if ($DB->record_exists('block_gsb_content', array('id' => $updgsb->id))) {
-						$DB->update_record('block_gsb_content', $updgsb); 
+					if ($DB->record_exists('block_gsb', array('id' => $updgsb->id))) {
+						$DB->update_record('block_gsb', $updgsb); 
 					} 				
 
 			 
@@ -824,7 +824,7 @@ class block_gsb extends block_base {
 					}
 				}
 				
-				$table = "block_gsb_content";
+				$table = "block_gsb";
 				$conditions = array('ids'=>"$courseid1", 'gsboverride'=>'yes');
 				$override = $DB->record_exists($table, $conditions); 
 				//echo $override;
@@ -832,8 +832,8 @@ class block_gsb extends block_base {
 					$updgsb->ids = $courseid;
 					$updgsb->gsb = $gsb_score;
 					$updgsb->gsboverride = 'no';
-					if ($DB->record_exists('block_gsb_content', array('id' => $updgsb->id))) {
-						$DB->update_record('block_gsb_content', $updgsb); 
+					if ($DB->record_exists('block_gsb', array('id' => $updgsb->id))) {
+						$DB->update_record('block_gsb', $updgsb); 
 					} 
 				}
 			}
@@ -843,7 +843,7 @@ class block_gsb extends block_base {
 
 
 			//Select GSB for course
-			$sql = "SELECT gsb FROM {block_gsb_content} WHERE ids = $courseid";
+			$sql = "SELECT gsb FROM {block_gsb} WHERE ids = $courseid";
 			$gsb = $DB->get_field_sql($sql);//modified for moodle 2 DB object
 
 			//Display GSB for course and link to GSB explanantion
@@ -896,4 +896,3 @@ class block_gsb extends block_base {
 		}
 	}
 }
-?>  
