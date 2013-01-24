@@ -896,4 +896,3 @@ class block_gsb extends block_base {
 		}
 	}
 }
-?>  
