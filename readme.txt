@@ -1,5 +1,4 @@
-Written by: Richard Havinga 2012 richard.havinga@southampton-city.ac.uk
-
+Written by: Richard Havinga 2012 
 ----------------------------------------------------------------------------------------
 
 This plugin is designed as part of a set of plugins called GSB Medal. The set allows you to benchmark courses to select criteria based upon activity 
