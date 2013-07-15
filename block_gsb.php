@@ -19,10 +19,9 @@
  *
  * @package    report
  * @subpackage GSB
- * @copyright  2012 onwards Richard Havinga richard.havinga@southampton-city.ac.uk
+ * @copyright  2012 onwards Richard Havinga 
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
 class block_gsb extends block_base {  
 
 	function init() {    
@@ -56,6 +55,8 @@ class block_gsb extends block_base {
 		
 			$config = get_config('gsb'); 
 			$automedal = $config->automedal;
+			//echo "automedal:";
+			//echo $automedal;
 			if($automedal == '1') {
 				//Bronze Settings
 
@@ -90,6 +91,14 @@ class block_gsb extends block_base {
 				$bchoice = $config->bronzechoice;
 				$bglossarytype = $config->bronzeglossarytype;
 				$bglossary = $config->bronzeglossary;
+				$blabelstype = $config->bronzelabelstype;		
+				$blabels = $config->bronzelabels;
+				$burlstype = $config->bronzeurlstype;
+				$burls = $config->bronzeurls;
+				$bfolderstype = $config->bronzefolderstype;
+				$bfolders = $config->bronzefolders;
+				$bheadingstype = $config->bronzeheadingstype;
+				$bheadings = $config->bronzeheadings;
 						
 				//Silver Settings
 
@@ -124,7 +133,15 @@ class block_gsb extends block_base {
 				$schoice = $config->silverchoice;
 				$sglossarytype = $config->silverglossarytype;
 				$sglossary = $config->silverglossary;
-
+				$slabelstype = $config->silverlabelstype;		
+				$slabels = $config->silverlabels;
+				$surlstype = $config->silverurlstype;
+				$surls = $config->silverurls;
+				$sfolderstype = $config->silverfolderstype;
+				$sfolders = $config->silverfolders;
+				$sheadingstype = $config->silverheadingstype;
+				$sheadings = $config->silverheadings;
+				
 				//Gold Settings
 
 				$goptional = $config->goldnumoptional;
@@ -158,8 +175,16 @@ class block_gsb extends block_base {
 				$gchoice = $config->goldchoice;
 				$gglossarytype = $config->goldglossarytype;
 				$gglossary = $config->goldglossary;
-
-
+				$glabelstype = $config->goldlabelstype;		
+				$glabels = $config->goldlabels;
+				$gurlstype = $config->goldurlstype;
+				$gurls = $config->goldurls;
+				$gfolderstype = $config->goldfolderstype;
+				$gfolders = $config->goldfolders;
+				$gheadingstype = $config->goldheadingstype;
+				$gheadings = $config->goldheadings;
+				
+				
 				$enrolments = $config-> minenrolments;
 
 
@@ -213,6 +238,10 @@ class block_gsb extends block_base {
 						$record->gsb = "";
 						$record->gsboverride = "no";
 						$record->enrolnum = 0;
+						$record->urlsnum = 0;
+						$record->foldersnum = 0;
+						$record->headingsnum = 0;
+						$record->labelsnum = 0;
 						$insert_gsb_row = $DB->insert_record('block_gsb', $record);		
 
 					}
@@ -260,40 +289,109 @@ class block_gsb extends block_base {
 				//Stats Inserting based upon standard activity types
 					$updgsb->id = $gsbid;
 					
-				//Number of Resources 
+				//Number of File Resources 
 				
 					$linksnum =  $DB->count_records('resource', array('course'=>$courseid));
-
-				//Number of files in labels
+					
+				//Number of Folders 
 				
-					$labelfilenum = $DB->get_records_sql("SELECT {label}.id FROM {label} WHERE course = '$courseid' AND (intro LIKE '%@@PLUGINFILE@@%' )");
-					$labelfilenum = count($labelfilenum);
-					 
+					$foldersnum =  $DB->count_records('folder', array('course'=>$courseid));		
+					$updgsb->foldersnum = $foldersnum;
+					
+				//Number of Labels 
+				
+					$labelsnum =  $DB->count_records('label', array('course'=>$courseid));							
+					$updgsb->labelsnum = $labelsnum;					
+				//Number of URLs 
+				
+					$urlsnum =  $DB->count_records('url', array('course'=>$courseid));				
+					$updgsb->urlsnum = $urlsnum;	
+					
+				//Are any sections not given headings - only use when having topic headings in course formats and headings are defined for all topics.
+				
+					//$headingsnum1 =  ($DB->count_records('course_sections', array('course'=>$courseid))) - 1;	
+					$headingsnum2 = $DB->count_records('course_sections', array('course'=>$courseid, 'name'=>NULL));
+					$headingsnum3 = $headingsnum2;
+					if($headingsnum3 < 1){
+					$headingnum = 1;
+					}else{
+					$headingnum = 0;
+					}
+					$updgsb->headingsnum = $headingnum;						
+					
+
+					$labelfilenum = $DB->get_record_sql("SELECT ROUND((LENGTH(intro)-LENGTH(REPLACE(intro, '@@PLUGINFILE@@', '')))/13) AS COUNT FROM {label} WHERE course ='$courseid'");
+					if(isset($labelfilenum->count)){					
+					$labelfilenum = $labelfilenum->count;
+					}else{
+					$labelfilenum = 0;
+					}
+
+					
 				//Number of files in web pages
 				
-					$pagefilenum = $DB->get_records_sql("SELECT {page}.id FROM {page} WHERE course = '$courseid' AND (content LIKE '%@@PLUGINFILE@@%' )");
-					$pagefilenum = count($pagefilenum);
-				
+					//$pagefilenum = $DB->get_records_sql("SELECT {page}.id FROM {page} WHERE course = '$courseid' AND (content LIKE '%@@PLUGINFILE@@%' )");
+					//Checking how many times plugin file appears in labels within a particular course
+					$pagefilenum = $DB->get_record_sql("SELECT ROUND((LENGTH(content)-LENGTH(REPLACE(content, '@@PLUGINFILE@@', '')))/13) AS COUNT FROM {page} WHERE course ='$courseid'");
+					if(isset($pagefilenum->count)){						
+					$pagefilenum = $pagefilenum->count;
+					}else{
+					$pagefilenum = 0;
+					}
 				//Number of files in books
 				
 					if ($dbman->table_exists('book_chapters')) {
 					
-						$bookfilenum = $DB->get_records_sql("SELECT {book_chapters}.id FROM {book_chapters} INNER JOIN {book} ON {book_chapters}.bookid = {book}.id WHERE {book}.course = '$courseid' AND (content LIKE '%@@PLUGINFILE@@%' )");
-						$bookfilenum = count($bookfilenum);
-
+						//$bookfilenum = $DB->get_records_sql("SELECT {book_chapters}.id FROM {book_chapters} INNER JOIN {book} ON {book_chapters}.bookid = {book}.id WHERE {book}.course = '$courseid' AND (content LIKE '%@@PLUGINFILE@@%' )");
+						//Checking how many times plugin file appears in labels within a particular course												
+						$bookfilenum = $DB->get_record_sql("SELECT ROUND((LENGTH(content)-LENGTH(REPLACE(content, '@@PLUGINFILE@@', '')))/13) AS COUNT FROM {book_chapters} INNER JOIN {book} ON {book_chapters}.bookid = {book}.id WHERE {book}.course = '$courseid' ");													
+					if(isset($bookfilenum->count)){								
+						$bookfilenum = $bookfilenum->count;
+					}else{
+					$bookfilenum = 0;
 					}
-					$linksnum = $linksnum + $bookfilenum + $labelfilenum + $pagefilenum;
+					}else{
+					$bookfilenum = 0;
+					}
+					
+					//files within folders
+					
+					$folder = $DB->get_records_sql("SELECT {folder}.id FROM {folder} WHERE course = '$courseid'");
+					$count = 0;
+					$folders = 0;
+					foreach ($folder as $fo){
+						//files within folders
+						$fs = get_file_storage();
+						$cm = get_coursemodule_from_instance('folder', $fo->id);
+						$context = context_module::instance($cm->id);
+						$contextid = $context->id;
+						$files = $fs->get_area_files($contextid, 'mod_folder', 'content', false, '', false);
+						$folders += count($files); 
+					}
+					$folderfilenum = $folders;
+										
+					$linksnum = $linksnum + $bookfilenum + $labelfilenum + $pagefilenum + $folderfilenum;
 					$updgsb->linksnum = $linksnum;
-
+					
 				//Number of Standard Assignments
 				
-					$assignmentnum1 =  $DB->count_records('assignment', array('course'=>$courseid));
+					if ($dbman->table_exists('assignment')) {
+						$assignmentnum1 =  $DB->count_records('assignment', array('course'=>$courseid));
+					}else{
+						$assignmentnum1 = 0;	
+						}
 					if ($dbman->table_exists('assign')) {
 						$assignmentnum2 =  $DB->count_records('assign', array('course'=>$courseid));
 					}else{
 						$assignmentnum2 = 0;
 					}
-					$assignmentnum=$assignmentnum1 + $assignmentnum2;
+				//Number of Turnitin Assignments	
+					if ($dbman->table_exists('turnitintool')) {
+					$assignmentnum3 =  $DB->count_records('turnitintool', array('course'=>$courseid));
+					}else{
+						$assignmentnum3 = 0;
+					}
+					$assignmentnum=$assignmentnum1 + $assignmentnum2 + $assignmentnum3;
 					$updgsb->assignmentnum = $assignmentnum;
 				
 				//Number of Feedback Activities
@@ -415,12 +513,14 @@ class block_gsb extends block_base {
 
 					if($nostudent->students>0){
 					$studentviews = round($studentviewsobj->views / $nostudent->students);
+
 					}else{
 					$studentviews = 0;
 					}
 
-					if($config->studentviews >= $studentviews) {
+					if($config->studentviews > $studentviews) {
 						$gsb_score = "";
+
 					} elseif($config->minenrolments >= $enrolnum) {
 						$gsb_score = "";
 					} else {
@@ -459,7 +559,7 @@ class block_gsb extends block_base {
 								if($interactnum < $bims) $break ++;
 							}
 						}
-						
+						if ($dbman->table_exists('questionnaire')) {
 						if($bquesttype == 'optional') {
 							if($questnum >= $bquest) $bop_count ++;
 						} else {
@@ -467,7 +567,7 @@ class block_gsb extends block_base {
 								if($questnum < $bquest) $break ++;
 							}
 						}
-						
+						}
 						
 						if($bquiztype == 'optional') {
 							if($quiznum >= $bquiz) $bop_count ++;
@@ -543,17 +643,45 @@ class block_gsb extends block_base {
 								if($glossarynum < $bglossary) $break ++;
 							}
 						}
+							if($blabelstype == 'optional') {
+								if($labelsnum >= $blabels) $bop_count ++;
+							} else {
+								if($blabelstype == 'mandatory') {
+									if($labelsnum < $blabels) $break ++;
+								}
+							}							
+							if($burlstype == 'optional') {
+								if($urlsnum >= $burls) $bop_count ++;
+							} else {
+								if($burlstype == 'mandatory') {
+									if($urlsnum < $burls) $break ++;
+								}
+							}							
+							if($bfolderstype == 'optional') {
+								if($foldersnum >= $bfolders) $bop_count ++;
+							} else {
+								if($bfolderstype == 'mandatory') {
+									if($foldersnum < $bfolders) $break ++;
+								}
+							}							
+							if($bheadingstype == 'optional') {
+								if($headingnum == '0' ) $bop_count ++;
+							} else {
+								if($bheadingstype == 'mandatory') {
+									if($headingnum == '0') $break ++;
+								}
+							}						
 
 						if(($bop_count >= $config->bronzenumoptional) && ($break < 1)) {
 							$gsb_bronze = 1;
 							$gsb_score = "Bronze";
+
 						} else {
 							$gsb_bronze = 0;
 							$gsb_score = "";
 						}
 						$sop_count = 0;
 						$break = 0;
-					
 						if($gsb_bronze == 1) {
 
 					
@@ -590,15 +718,15 @@ class block_gsb extends block_base {
 									if($interactnum < $sims) $break ++;
 								}
 							}
-							
+							if ($dbman->table_exists('questionnaire')) {
 							if($squesttype == 'optional') {
-								if($questnum >= $squest) $sop_count ++;
+								if(squestnum >= $squest) $sop_count ++;
 							} else {
 								if($squesttype == 'mandatory') {
 									if($questnum < $squest) $break ++;
 								}
 							}
-							
+							}
 							
 							if($squiztype == 'optional') {
 								if($quiznum >= $squiz) $sop_count ++;
@@ -673,6 +801,34 @@ class block_gsb extends block_base {
 								if($sglossarytype == 'mandatory') {
 									if($glossarynum < $sglossary) $break ++;
 								}
+							}							
+							if($slabelstype == 'optional') {
+								if($labelsnum >= $slabels) $sop_count ++;
+							} else {
+								if($slabelstype == 'mandatory') {
+									if($labelsnum < $slabels) $break ++;
+								}
+							}							
+							if($surlstype == 'optional') {
+								if($urlsnum >= $surls) $sop_count ++;
+							} else {
+								if($surlstype == 'mandatory') {
+									if($urlsnum < $surls) $break ++;
+								}
+							}							
+							if($sfolderstype == 'optional') {
+								if($foldersnum >= $sfolders) $sop_count ++;
+							} else {
+								if($sfolderstype == 'mandatory') {
+									if($foldersnum < $sfolders) $break ++;
+								}
+							}							
+							if($sheadingstype == 'optional') {
+								if($headingnum == '0' ) $sop_count ++;
+							} else {
+								if($sheadingstype == 'mandatory') {
+									if($headingnum == '0') $break ++;
+								}
 							}
 						}
 						
@@ -720,7 +876,7 @@ class block_gsb extends block_base {
 									if($interactnum < $gims) $break ++;
 								}
 							}
-							
+							if ($dbman->table_exists('questionnaire')) {					
 							if($gquesttype == 'optional') {
 								if($questnum >= $gquest) $gop_count ++;
 							} else {
@@ -728,7 +884,7 @@ class block_gsb extends block_base {
 									if($questnum < $gquest) $break ++;
 								}
 							}
-							
+							}
 							
 							if($gquiztype == 'optional') {
 								if($quiznum >= $gquiz) $gop_count ++;
@@ -804,6 +960,36 @@ class block_gsb extends block_base {
 									if($glossarynum < $gglossary) $break ++;
 								}
 							}
+							if($glabelstype == 'optional') {
+								if($labelsnum >= $glabels) $gop_count ++;
+							} else {
+								if($glabelstype == 'mandatory') {
+									if($labelsnum < $glabels) $break ++;
+								}
+							}							
+							if($gurlstype == 'optional') {
+								if($urlsnum >= $gurls) $gop_count ++;
+							} else {
+								if($gurlstype == 'mandatory') {
+									if($urlsnum < $gurls) $break ++;
+								}
+							}							
+							if($gfolderstype == 'optional') {
+								if($foldersnum >= $gfolders) $gop_count ++;
+							} else {
+								if($gfolderstype == 'mandatory') {
+									if($foldersnum < $gfolders) $break ++;
+								}
+							}							
+							if($gheadingstype == 'optional') {
+								if($headingnum == '0' ) $gop_count ++;
+							} else {
+								if($gheadingstype == 'mandatory') {
+									if($headingnum == '0') $break ++;
+								}
+							}							
+							
+							
 						}
 
 						if(($gop_count >= $config->goldnumoptional) && ($break < 1)) {
@@ -827,15 +1013,14 @@ class block_gsb extends block_base {
 				$table = "block_gsb";
 				$conditions = array('ids'=>"$courseid1", 'gsboverride'=>'yes');
 				$override = $DB->record_exists($table, $conditions); 
-				//echo $override;
-				if($override < '1') {
+			    if($override <= '0') {
 					$updgsb->ids = $courseid;
 					$updgsb->gsb = $gsb_score;
 					$updgsb->gsboverride = 'no';
 					if ($DB->record_exists('block_gsb', array('id' => $updgsb->id))) {
 						$DB->update_record('block_gsb', $updgsb); 
 					} 
-				}
+				} 
 			}
 
 			
@@ -850,15 +1035,15 @@ class block_gsb extends block_base {
 			$message = '';
 			if ($viewgsb == 'Yes' and $gsb == 'Gold' ) {
 				$message = '<div align="center">Your course is:</div><br />';
-				$img = "<div align='center'><img src='$CFG->wwwroot/blocks/gsb/images/gold.png' width='90' height='98'></div>";
+				$img = "<div align='center'><img src='$CFG->wwwroot/blocks/gsb/pix/gold.png' width='90' height='98'></div>";
 				$link = "<p align='center'><b><a href='$config->help' target='_blank'>How can I improve my course medal?</a></b></p>";
 			} else if ($viewgsb =='Yes' and $gsb == 'Silver' ) {
 				$message = '<div align="center">Your course is:</div><br />';
-				$img = "<div align='center'><img src='$CFG->wwwroot/blocks/gsb/images/silver.png' width='90' height='98'></div>";
+				$img = "<div align='center'><img src='$CFG->wwwroot/blocks/gsb/pix/silver.png' width='90' height='98'></div>";
 				$link = "<p align='center'><b><a href='$config->help' target='_blank'>How can I improve my course medal?</a></b></p>";
 			} else if($viewgsb == 'Yes' and $gsb == 'Bronze' ) {
 				$message = '<div align="center">Your course is:</div><br />';
-				$img = "<div align='center'><img src='$CFG->wwwroot/blocks/gsb/images/bronze.png' width='90' height='98'></div>";
+				$img = "<div align='center'><img src='$CFG->wwwroot/blocks/gsb/pix/bronze.png' width='90' height='98'></div>";
 				$link = "<p align='center'><b><a href='$config->help' target='_blank'>How can I improve my course medal?</a></b></p>";
 			} else if($viewgsb == 'Yes' and $gsb == 'exclude') {
 				$message = '';
@@ -866,7 +1051,7 @@ class block_gsb extends block_base {
 				$link = "";			
 			} else{
 				$message = '<div align="center">Your course is:</div><br />';
-				$img = "<div align='center'><img src='$CFG->wwwroot/blocks/gsb/images/in_development.png' width='90' height='90'></div>";
+				$img = "<div align='center'><img src='$CFG->wwwroot/blocks/gsb/pix/in_development.png' width='90' height='90'></div>";
 				$link = "<p align='center'><b><a href='$config->help' target='_blank'>How can I improve my course medal?</a></b></p>";
 			}
 		} else {
