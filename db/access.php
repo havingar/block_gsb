@@ -36,7 +36,7 @@ $capabilities = array(
         )
     ),
 	
-	'block/simplehtml:addinstance' => array(
+	'block/gsb:addinstance' => array(
         'riskbitmask' => RISK_SPAM | RISK_XSS,
  
         'captype' => 'write',
