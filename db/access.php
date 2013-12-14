@@ -48,6 +48,21 @@ $capabilities = array(
  
         'clonepermissionsfrom' => 'moodle/site:manageblocks'
     ),
+	
+	'block/gsb:myaddinstance' => array(
+        'riskbitmask' => RISK_SPAM | RISK_XSS,
+ 
+        'captype' => 'write',
+        'contextlevel' => CONTEXT_BLOCK,
+        'archetypes' => array(
+            'editingteacher' => CAP_PROHIBIT,
+            'manager' => CAP_PROHIBIT
+        ),
+ 
+        'clonepermissionsfrom' => 'moodle/site:manageblocks'
+    ),
+	
+	
  
     // Add more capabilities here ...
 )
