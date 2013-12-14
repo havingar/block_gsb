@@ -43,7 +43,7 @@ class block_gsb extends block_base {
 		$viewgsb = '';
 		$link = '';
 
-		 $blockcontext = get_context_instance(CONTEXT_COURSE, $courseid);
+		 $blockcontext = context_course::instance($courseid);
 			
 		 if (has_capability('block/gsb:viewgsb', $blockcontext)) {
 				$viewgsb = "Yes";
