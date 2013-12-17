@@ -320,7 +320,7 @@ class block_gsb extends block_base {
 					$updgsb->headingsnum = $headingnum;						
 					
 
-					$labelfilenum = $DB->get_record_sql("SELECT ROUND((LENGTH(intro)-LENGTH(REPLACE(intro, '@@PLUGINFILE@@', '')))/13) AS COUNT FROM {label} WHERE course ='$courseid'");
+					$labelfilenum = $DB->get_record_sql("SELECT DISTINCT ROUND((LENGTH(intro)-LENGTH(REPLACE(intro, '@@PLUGINFILE@@', '')))/13) AS COUNT FROM {label} WHERE course ='$courseid'");
 					if(isset($labelfilenum->count)){					
 					$labelfilenum = $labelfilenum->count;
 					}else{
