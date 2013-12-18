@@ -30,8 +30,5 @@ $plugin->requires  = 2011120100;        // Requires this Moodle version
 $plugin->component = 'block_gsb'; // Full name of the plugin (used for diagnostics)
 $plugin->maturity = MATURITY_STABLE;
 $plugin->release = '2.2.0';
-$plugin->dependencies   = array (
-    'report_gsb'   => 2013071500,          // Needs the GSB Report
-);
 
 $plugin->cron = 3600; // time interval to run script on Cron
