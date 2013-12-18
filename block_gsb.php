@@ -1046,7 +1046,6 @@ $params['cid'] = $courseid;
 				$img = "<div align='center'><img src='$CFG->wwwroot/blocks/gsb/pix/bronze.png' width='90' height='98'></div>";
 				$link = "<p align='center'><b><a href='$config->help' target='_blank'>How can I improve my course medal?</a></b></p>";
 			} else if($viewgsb == 'Yes' and $gsb == "") {
-			echo "testing";
 				$message = '<div align="center">Your course is:</div><br />';
 				$img = "<div align='center'><img src='$CFG->wwwroot/blocks/gsb/pix/in_development.png' width='90' height='90'></div>";
 				$link = "<p align='center'><b><a href='$config->help' target='_blank'>How can I improve my course medal?</a></b></p>";
