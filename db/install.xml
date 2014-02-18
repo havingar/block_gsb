@@ -7,7 +7,7 @@
     <TABLE NAME="block_gsb" COMMENT="Gold Silver Bronze data table">
       <FIELDS>
         <FIELD NAME="id" TYPE="int" LENGTH="7" NOTNULL="true" UNSIGNED="true" SEQUENCE="true"  ENUM="false" NEXT="ids"/>
-		<FIELD NAME="ids" TYPE="char" LENGTH="10" NOTNULL="true" SEQUENCE="false" ENUM="false" PREVIOUS="id" NEXT="assignmentnum"/>
+		<FIELD NAME="ids" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" ENUM="false" PREVIOUS="id" NEXT="assignmentnum"/>
         <FIELD NAME="assignmentnum" TYPE="int" LENGTH="6" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" ENUM="false" PREVIOUS="ids" NEXT="chatnum"/>
         <FIELD NAME="chatnum" TYPE="int" LENGTH="6" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" ENUM="false" PREVIOUS="assignmentnum" NEXT="feedbacknum"/>
         <FIELD NAME="feedbacknum" TYPE="int" LENGTH="6" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" ENUM="false" PREVIOUS="chatnum" NEXT="forumnum"/>

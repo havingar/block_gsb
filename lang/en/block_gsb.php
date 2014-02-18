@@ -23,7 +23,7 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
  
-$string['blockname'] = 'GSB';
-$string['pluginname'] = 'GSB';
-$string['urltext'] = 'Link to GSB Support Guide';
-$string['gsb:viewgsb'] = 'View the Gold, Silver, Bronze course medal';
+$string['blockname'] = 'Medal';
+$string['pluginname'] = 'Medal';
+$string['urltext'] = 'Link to Medals Support Guide';
+$string['gsb:viewgsb'] = 'View the Course Medal';

@@ -244,7 +244,7 @@ class block_gsb extends block_base {
 						$insert_gsb_row = $DB->insert_record('block_gsb', $record);          
 					}
 				}	
-				$sql = "SELECT {block_gsb}.id AS gb, {course}.id, {course}.shortname, {course}.fullname, {block_gsb}.gsb, {block_gsb}.enrolnum, {block_gsb}.gsboverride
+				$sql = "SELECT {block_gsb}.id AS gb, {course}.id, {block_gsb}.ids, {course}.shortname, {course}.fullname, {block_gsb}.gsb, {block_gsb}.enrolnum, {block_gsb}.gsboverride
 						FROM  {course} INNER JOIN {block_gsb} ON {course}.id = {block_gsb}.ids
 						WHERE ((({block_gsb}.ids = $courseid)))";
 						
@@ -1002,7 +1002,7 @@ $params['cid'] = $courseid;
                                                 else if ($gsb == 11) $gsb_score = "Silver";
                                                 else if ($gsb == 1) $gsb_score = "Bronze";
                                                 else if ($gsb == 101) $gsb_score = "Bronze";
-                                                else $gsb_score = "";
+                                                else $gsb_score = "In Dev";
                                                         
                                         }
                                 }
@@ -1045,7 +1045,7 @@ $params['cid'] = $courseid;
 				$message = '<div align="center">Your course is:</div><br />';
 				$img = "<div align='center'><img src='$CFG->wwwroot/blocks/gsb/pix/bronze.png' width='90' height='98'></div>";
 				$link = "<p align='center'><b><a href='$config->help' target='_blank'>How can I improve my course medal?</a></b></p>";
-			} else if($viewgsb == 'Yes' and $gsb == "") {
+			} else if($viewgsb == 'Yes' and $gsb == "In Dev") {
 				$message = '<div align="center">Your course is:</div><br />';
 				$img = "<div align='center'><img src='$CFG->wwwroot/blocks/gsb/pix/in_development.png' width='90' height='90'></div>";
 				$link = "<p align='center'><b><a href='$config->help' target='_blank'>How can I improve my course medal?</a></b></p>";
