@@ -312,15 +312,11 @@ class block_gsb extends block_base {
                                         
                  //Are any sections not given headings - only use when having topic headings in course formats and headings are defined for all topics.
                                 
-                 //$headingsnum1 =  ($DB->count_records('course_sections', array('course'=>$courseid))) - 1;        
-                    $headingsnum2 = $DB->count_records('course_sections', array('course'=>$courseid, 'name'=>NULL));
-                    $headingsnum3 = $headingsnum2;
-                    if($headingsnum3 < 1){
-                        $headingnum = 1;
-                    }else{
-                        $headingnum = 0;
-                    }
-                    $updgsb->headingsnum = $headingnum;                                                
+				//Changing to Minimum number of section headings 
+					$cparams = array('cid' => $courseid, 'text' => '%%');				
+					$select = "course = :cid AND ".$DB->sql_like('name', ':text');
+					$headingsnum = $DB->count_records_select('course_sections', $select, $cparams);							
+                    $updgsb->headingsnum = $headingsnum;        		                                        
 					
 				//Number of files in labels
 				
@@ -334,19 +330,21 @@ class block_gsb extends block_base {
 				
 				//Number of files in books
 				
-                if ($dbman->table_exists('book_chapters')) {
-                                        
-                //$bookfilenum = $DB->get_records_sql("SELECT {book_chapters}.id FROM {book_chapters} INNER JOIN {book} ON {book_chapters}.bookid = {book}.id WHERE {book}.course = '$courseid' AND (content LIKE '%@@PLUGINFILE@@%' )");
-                //Checking how many times plugin file appears in labels within a particular course                                                                                                
-                    $bookfilenum = $DB->get_record_sql("SELECT ROUND((LENGTH(content)-LENGTH(REPLACE(content, '@@PLUGINFILE@@', '')))/13) AS COUNT FROM {book_chapters} INNER JOIN {book} ON {book_chapters}.bookid = {book}.id WHERE {book}.course = '$courseid' ");                                                                                                        
-                if(isset($bookfilenum->count)){                                                                
-                    $bookfilenum = $bookfilenum->count;
-                }else{
-                    $bookfilenum = 0;
-                }
-                }else{
-                    $bookfilenum = 0;
-                }
+ 				if ($dbman->table_exists('book_chapters')) {
+					
+						//$bookfilenum = $DB->get_records_sql("SELECT {book_chapters}.id FROM {book_chapters} INNER JOIN {book} ON {book_chapters}.bookid = {book}.id WHERE {book}.course = '$courseid' AND (content LIKE '%@@PLUGINFILE@@%' )");
+						//Checking how many times plugin file appears in labels within a particular course				
+					$content = $DB->sql_length("content");
+					$plugin = $DB->sql_length("REPLACE(content, '@@PLUGINFILE@@', '')");	
+					$bookfilenum = $DB->get_record_sql("SELECT ROUND(($content-$plugin)/13) AS COUNT FROM {book_chapters} INNER JOIN {book} ON {book_chapters}.bookid = {book}.id WHERE {book}.course = '$courseid' ");													
+					if(isset($bookfilenum->count)){								
+						$bookfilenum = $bookfilenum->count;
+					}else{
+						$bookfilenum = 0;
+					}
+				}else{
+					$bookfilenum = 0;
+				}
                 //files within folders
                                         
                 $folder = $DB->get_records_sql("SELECT {folder}.id FROM {folder} WHERE course = '$courseid'");
@@ -516,10 +514,10 @@ $params['cid'] = $courseid;
 					$studentviews = round($studentviewsobj->views / $nostudent->students);
 
  if($config->studentviews > $studentviews) {
-                                                $gsb_score = "";
+                                                $gsb_score = "Exclude";
 
                                         } elseif($config->minenrolments >= $enrolnum) {
-                                                $gsb_score = "";
+                                                $gsb_score = "Exclude";
                                         } else {
                                         
                                                 $bop_count = 0;
@@ -661,14 +659,14 @@ $params['cid'] = $courseid;
                                                                         if($foldersnum < $bfolders) $break ++;
                                                                 }
                                                         }                                                        
+                                                
                                                         if($bheadingstype == 'optional') {
-                                                                if($headingnum == '0' ) $bop_count ++;
+                                                                if($headingnum >= $bheadings) $bop_count ++;
                                                         } else {
                                                                 if($bheadingstype == 'mandatory') {
-                                                                        if($headingnum == '0') $break ++;
+                                                                        if($headingnum < $bheadings) $break ++;
                                                                 }
-                                                        }                                                
-
+                                                        }          
                                                 if(($bop_count >= $config->bronzenumoptional) && ($break < 1)) {
                                                         $gsb_bronze = 1;
                                                         $gsb_score = "Bronze";
@@ -821,12 +819,12 @@ $params['cid'] = $courseid;
                                                                 }
                                                         }                                                        
                                                         if($sheadingstype == 'optional') {
-                                                                if($headingnum == '0' ) $sop_count ++;
+                                                                if($headingnum >= $sheadings) $bop_count ++;
                                                         } else {
                                                                 if($sheadingstype == 'mandatory') {
-                                                                        if($headingnum == '0') $break ++;
+                                                                        if($headingnum < $sheadings) $break ++;
                                                                 }
-                                                        }
+                                                        }        
                                                 }
                                                 
                                                 if(($sop_count >= $config->silvernumoptional) && ($break < 1)) {
@@ -979,12 +977,12 @@ $params['cid'] = $courseid;
                                                                 }
                                                         }                                                        
                                                         if($gheadingstype == 'optional') {
-                                                                if($headingnum == '0' ) $gop_count ++;
+                                                                if($headingnum >= $gheadings) $bop_count ++;
                                                         } else {
                                                                 if($gheadingstype == 'mandatory') {
-                                                                        if($headingnum == '0') $break ++;
+                                                                        if($headingnum < $gheadings) $break ++;
                                                                 }
-                                                        }                                                        
+                                                        }                                                      
                                                         
                                                         
                                                 }
