@@ -1,13 +1,10 @@
-Written by: Richard Havinga 2012 
-----------------------------------------------------------------------------------------
+WrThis plugin is designed as part of a set of plugins called GSB Medal. The set allows you to benchmark courses to select criteria based upon activity 
+and resource types and then display a medal to teachers on a course. You can decide to run these manually and approve the automatic medals as well as override them, or you can choose for them to auto-calculate every time an administrator or teacher visits a particular course. 
 
-This plugin is designed as part of a set of plugins called GSB Medal. The set allows you to benchmark courses to select criteria based upon activity 
-and resource types and then display a medal to teachers on a course. You can decide to run these manually and approve the automatic medals as well as override them,
-or you can choose for them to auto-calculate every time an administrator or teacher visits a particular course. 
+This tool is intended as a way to increase the range of activities used in a course and is not a course benchmarking tool which caters for course quality. It is used by several educational institutions to encourage the use of more collaborative activity types and therefore can align with encouraging pedagogical principles. 
 
-TODO: Write a Star Rating System Block for students to rate their course which can also be added to the benchmarking criteria. 
 
-1. To install unzip the gsb.zip file, then two folders (admin and blocks)to the root moodle folder.
+1. To install unzip the gsb.zip files (Block and Report), then two folders (admin and blocks)to the root moodle folder.
 
 2. Next log into Moodle as an administrator and visit: http:/your-moodle-address/admin  which will install the gsb block.
 
@@ -17,9 +14,9 @@ TODO: Write a Star Rating System Block for students to rate their course which c
 
 4. The GSB block can be added to courses in the normal way.
 
-5. The following html file is linked to the GSB block and gives teachers an explanation of what the GSB medal means, how to improve it and who to contact in your institution if they need help. You will need to change this to reflect your instituion:
+5. The following html file is linked to the GSB block and gives teachers an explanation of what the GSB medal means, how to improve it and who to contact in your institution if they need help. You will need to change this to reflect your institution:
    http://your-moodle-address/blocks/gsb/gsb_explained.htm
 
-Important: You probably want to hide the GSB block from students but leave it visible for teachers, non-editing teachers etc. You can do this under: Site Admin > Users > Permissions > Define Roles   edit the student and guest roles and change block/gsb:viewgsb to Prevent.
+
 		   
 
