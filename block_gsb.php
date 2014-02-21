@@ -364,7 +364,7 @@ class block_gsb extends block_base
                         //Checking how many times plugin file appears in labels within a particular course				
                         $content     = $DB->sql_length("content");
                         $plugin      = $DB->sql_length("REPLACE(content, '@@PLUGINFILE@@', '')");
-                        $bookfilenum = $DB->get_record_sql("SELECT ROUND(($content-$plugin)/13) AS COUNT FROM {book_chapters} INNER JOIN {book} ON {book_chapters}.bookid = {book}.id WHERE {book}.course = '$courseid' ");
+                        $bookfilenum = $DB->get_record_sql("SELECT ROUND(($content-$plugin)/13, 0) AS COUNT FROM {book_chapters} INNER JOIN {book} ON {book_chapters}.bookid = {book}.id WHERE {book}.course = '$courseid' ");
                         if (isset($bookfilenum->count)) {
                             $bookfilenum = $bookfilenum->count;
                         } else {
@@ -583,7 +583,7 @@ class block_gsb extends block_base
 															 )AND r.roleid $insql
 															 AND r.userid = u.id", $params);
                     
-                    $studentviews = round($studentviewsobj->views / $nostudent->students);
+                    $studentviews = round($studentviewsobj->views / $nostudent->students, 0);
                     
                     if ($config->studentviews > $studentviews) {
                         $gsb_score = "Exclude";
