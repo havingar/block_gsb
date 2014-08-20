@@ -753,7 +753,7 @@ class block_gsb extends block_base
 				                }
 			                }
 
-			                if (($bop_count >= $config->bronzenumoptional) && ($break < 1))
+			                if (($bop_count >= $boptional) && ($break < 1))
 				                $gsb_bronze = 1;
 			                else
 				                $gsb_bronze = 0;
@@ -958,7 +958,7 @@ class block_gsb extends block_base
 
 			                }
 
-			                if (($sop_count >= $config->silvernumoptional) && ($break < 1))
+			                if (($sop_count >= $soptional) && ($break < 1))
 				                $gsb_silver = 10;
 			                else
 				                $gsb_silver = 0;
@@ -1163,7 +1163,7 @@ class block_gsb extends block_base
 
 			                }
 
-			                if (($gop_count >= $config->goldnumoptional) && ($break < 1))
+			                if (($gop_count >= $goptional) && ($break < 1))
 				                $gsb_gold = 100;
 			                else
 				                $gsb_gold = 0;
