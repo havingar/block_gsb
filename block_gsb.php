@@ -586,10 +586,10 @@ class block_gsb extends block_base
                     $studentviews = round($studentviewsobj->views / $nostudent->students, 0);
                     
                     if ($config->studentviews > $studentviews) {
-                        $gsb_score = "Exclude";
+                        $gsb_score = "In Dev";
                         
                     } elseif ($config->minenrolments >= $enrolnum) {
-                        $gsb_score = "Exclude";
+                        $gsb_score = "In Dev";
                     } else {
                         
                         $bop_count = 0;
