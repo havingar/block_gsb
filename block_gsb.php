@@ -390,9 +390,9 @@ class block_gsb extends block_base
                     }
                     $folderfilenum = $folders;
                     
-                    $linksnum         = $linksnum + $bookfilenum + $labelfilenum + $pagefilenum;
+                    $linksnum         = $linksnum + $bookfilenum + $labelfilenum + $pagefilenum + $folderfilenum;
                     $updgsb->linksnum = $linksnum;
-                    
+
                     //Number of Standard Assignments
                     
                     if ($dbman->table_exists('assignment')) {
@@ -586,10 +586,10 @@ class block_gsb extends block_base
                     $studentviews = round($studentviewsobj->views / $nostudent->students, 0);
                     
                     if ($config->studentviews > $studentviews) {
-                        $gsb_score = "Exclude";
+                        $gsb_score = "In Dev";
                         
                     } elseif ($config->minenrolments >= $enrolnum) {
-                        $gsb_score = "Exclude";
+                        $gsb_score = "In Dev";
                     } else {
                         
                         $bop_count = 0;
