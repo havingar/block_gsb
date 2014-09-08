@@ -6,8 +6,8 @@
   <TABLES>
     <TABLE NAME="block_gsb" COMMENT="Gold Silver Bronze data table">
       <FIELDS>
-        <FIELD NAME="id" TYPE="int" LENGTH="7" NOTNULL="true" UNSIGNED="true" NEXT="ids"/>
-		<FIELD NAME="ids" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" PREVIOUS="id" NEXT="assignmentnum"/>
+        <FIELD NAME="id" TYPE="int" LENGTH="7" NOTNULL="true" UNSIGNED="true" SEQUENCE="true" NEXT="ids"/>
+	<FIELD NAME="ids" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" PREVIOUS="id" NEXT="assignmentnum"/>
         <FIELD NAME="assignmentnum" TYPE="int" LENGTH="6" NOTNULL="true" DEFAULT="0" PREVIOUS="ids" NEXT="chatnum"/>
         <FIELD NAME="chatnum" TYPE="int" LENGTH="6" NOTNULL="true" DEFAULT="0" PREVIOUS="assignmentnum" NEXT="feedbacknum"/>
         <FIELD NAME="feedbacknum" TYPE="int" LENGTH="6" NOTNULL="true" DEFAULT="0" PREVIOUS="chatnum" NEXT="forumnum"/>
@@ -29,7 +29,7 @@
         <FIELD NAME="urlsnum" TYPE="int" LENGTH="6" NOTNULL="true" DEFAULT="0" PREVIOUS="headingsnum" NEXT="gsb"/>
         <FIELD NAME="gsb" TYPE="char" LENGTH="7" NOTNULL="true" PREVIOUS="urlsnum" NEXT="gsboverride"/>
         <FIELD NAME="gsboverride" TYPE="char" LENGTH="3" NOTNULL="true" PREVIOUS="gsb" NEXT="enrolnum"/>
-        <FIELD NAME="enrolnum" TYPE="int" LENGTH="4" NOTNULL="true" PREVIOUS="gsboverride"/>
+        <FIELD NAME="enrolnum" TYPE="int" LENGTH="4" NOTNULL="true" DEFAULT="0" PREVIOUS="gsboverride"/>
       </FIELDS>
       <KEYS>
         <KEY NAME="primary" TYPE="primary" FIELDS="id" COMMENT="unique auto increment" NEXT="ids"/>
