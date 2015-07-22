@@ -25,15 +25,27 @@
 
 $capabilities = array(
     'block/gsb:viewgsb' => array(
-        'riskbitmask'  => RISK_PERSONAL,
-        'captype'      => 'read',
+        'riskbitmask' => RISK_PERSONAL,
+        'captype' => 'read',
         'contextlevel' => CONTEXT_BLOCK,
-        'archetypes'   => array(
+        'archetypes' => array(
             'student' => CAP_PROHIBIT,
             'teacher' => CAP_ALLOW,
             'editingteacher' => CAP_ALLOW,
             'manager' => CAP_ALLOW
         )
-    )
-    // Add more capabilities here ...
+    ),
+
+    'block/gsb:addinstance' => array(
+        'riskbitmask' => RISK_SPAM | RISK_XSS,
+
+        'captype' => 'write',
+        'contextlevel' => CONTEXT_BLOCK,
+        'archetypes' => array(
+            'editingteacher' => CAP_ALLOW,
+            'manager' => CAP_ALLOW
+        ),
+
+        'clonepermissionsfrom' => 'moodle/site:manageblocks'
+    ),
 );
